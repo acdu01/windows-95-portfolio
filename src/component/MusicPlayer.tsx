@@ -8,17 +8,19 @@ type Track = {
   fileName: string
 }
 
+const musicAssetUrl = (fileName: string) => `${import.meta.env.BASE_URL}music/${fileName}`
+
 const tracks: Track[] = [
   {
     title: "Can't Stop",
     artist: 'Red Hot Chili Peppers',
-    src: '/music/red-hot-chili-peppers_can-t-stop.mp3',
+    src: musicAssetUrl('red-hot-chili-peppers_can-t-stop.mp3'),
     fileName: "Can't Stop.mp3",
   },
   {
     title: 'Seven Nation Army',
     artist: 'The White Stripes',
-    src: '/music/seven-nation-army.mp3',
+    src: musicAssetUrl('seven-nation-army.mp3'),
     fileName: 'Seven Nation Army.mp3',
   },
 ]
@@ -31,6 +33,11 @@ const formatTime = (value: number): string => {
   const minutes = Math.floor(value / 60)
   const seconds = Math.floor(value % 60)
   return `${minutes}:${seconds.toString().padStart(2, '0')}`
+}
+
+const getPlaybackErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) return error.message
+  return 'Playback was blocked or failed.'
 }
 
 const styles = {
@@ -80,16 +87,29 @@ const styles = {
 function MusicPlayer() {
   const { requestedTrack, clearRequestedTrack } = useMusicStore()
   const audioRef = useRef<HTMLAudioElement>(null)
+  const playIntentRef = useRef(false)
   const [trackIndex, setTrackIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [volume, setVolume] = useState(0.8)
   const [hasLoadError, setHasLoadError] = useState(false)
+  const [playbackError, setPlaybackError] = useState<string | null>(null)
   const [isMuted, setIsMuted] = useState(false)
   const [isLooping, setIsLooping] = useState(false)
 
   const currentTrack = tracks[trackIndex]
+
+  const startPlayback = async (audio: HTMLAudioElement) => {
+    try {
+      setPlaybackError(null)
+      await audio.play()
+    } catch (error: unknown) {
+      setPlaybackError(getPlaybackErrorMessage(error))
+      setIsPlaying(false)
+      playIntentRef.current = false
+    }
+  }
 
   useEffect(() => {
     const audio = audioRef.current
@@ -97,20 +117,41 @@ function MusicPlayer() {
 
     const onTimeUpdate = () => setCurrentTime(audio.currentTime || 0)
     const onLoadedMetadata = () => setDuration(audio.duration || 0)
+    const onCanPlay = () => {
+      setHasLoadError(false)
+      setPlaybackError(null)
+      if (playIntentRef.current && audio.paused) {
+        void startPlayback(audio)
+      }
+    }
+    const onPlay = () => {
+      setIsPlaying(true)
+      setPlaybackError(null)
+      playIntentRef.current = true
+    }
+    const onPause = () => setIsPlaying(false)
     const onEnded = () => setTrackIndex((prev) => (prev + 1) % tracks.length)
     const onError = () => {
       setHasLoadError(true)
       setIsPlaying(false)
+      setPlaybackError('Could not load this track.')
+      playIntentRef.current = false
     }
 
     audio.addEventListener('timeupdate', onTimeUpdate)
     audio.addEventListener('loadedmetadata', onLoadedMetadata)
+    audio.addEventListener('canplay', onCanPlay)
+    audio.addEventListener('play', onPlay)
+    audio.addEventListener('pause', onPause)
     audio.addEventListener('ended', onEnded)
     audio.addEventListener('error', onError)
 
     return () => {
       audio.removeEventListener('timeupdate', onTimeUpdate)
       audio.removeEventListener('loadedmetadata', onLoadedMetadata)
+      audio.removeEventListener('canplay', onCanPlay)
+      audio.removeEventListener('play', onPlay)
+      audio.removeEventListener('pause', onPause)
       audio.removeEventListener('ended', onEnded)
       audio.removeEventListener('error', onError)
     }
@@ -138,15 +179,17 @@ function MusicPlayer() {
     const audio = audioRef.current
     if (!audio) return
 
+    const shouldResumePlayback = playIntentRef.current || !audio.paused
+
     setCurrentTime(0)
     setDuration(0)
     setHasLoadError(false)
+    setPlaybackError(null)
+    playIntentRef.current = shouldResumePlayback
+    audio.pause()
     audio.load()
-
-    if (isPlaying) {
-      void audio.play().catch(() => {
-        setIsPlaying(false)
-      })
+    if (audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA && playIntentRef.current) {
+      void startPlayback(audio)
     }
   }, [trackIndex])
 
@@ -171,17 +214,18 @@ function MusicPlayer() {
     if (!audio) return
 
     if (isPlaying) {
+      playIntentRef.current = false
       audio.pause()
-      setIsPlaying(false)
       return
     }
 
-    try {
-      await audio.play()
-      setIsPlaying(true)
-    } catch {
-      setIsPlaying(false)
+    playIntentRef.current = true
+    if (audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      await startPlayback(audio)
+      return
     }
+
+    audio.load()
   }
 
   const playPrev = () => setTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length)
@@ -190,9 +234,7 @@ function MusicPlayer() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minWidth: '320px' }}>
-      <audio ref={audioRef}>
-        <source src={currentTrack.src} type="audio/mpeg" />
-      </audio>
+      <audio ref={audioRef} src={currentTrack.src} />
 
       <div style={styles.panel}>
         <div style={{ fontWeight: 700 }}>{currentTrack.title}</div>
@@ -294,7 +336,12 @@ function MusicPlayer() {
 
       {hasLoadError && (
         <p style={{ color: '#8a0000', margin: 0 }}>
-          Could not load this file. Put tracks in `public/music/` and update paths in `MusicPlayer.tsx`.
+          Could not load this track. The file may be missing, unreadable, or requested from the wrong base path.
+        </p>
+      )}
+      {playbackError && !hasLoadError && (
+        <p style={{ color: '#8a0000', margin: 0 }}>
+          Playback failed: {playbackError}
         </p>
       )}
     </div>

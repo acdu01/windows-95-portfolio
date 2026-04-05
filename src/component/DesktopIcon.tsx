@@ -44,8 +44,10 @@ interface DesktopIconProps {
   icon: ReactElement
   windowIcon?: ReactElement
   name: string
+  desktopLabel?: string
   children: ReactNode
   showOnDesktop?: boolean
+  openByDefault?: boolean
   onOpen?: () => void
   width?: number
   height?: number
@@ -53,6 +55,8 @@ interface DesktopIconProps {
   minHeight?: number
   initialX?: number
   initialY?: number
+  initialRight?: number
+  initialBottom?: number
 }
 
 type DragState = {
@@ -84,6 +88,29 @@ const sizedIcon = (icon: ReactElement, size: number): ReactElement => {
   return React.cloneElement(icon as ReactElement<{ variant?: string }>, {
     variant: size <= 16 ? '16x16_4' : '32x32_4',
   })
+}
+
+const ICON_WIDTH = 120
+const ICON_HEIGHT = 120
+
+const getInitialPosition = ({
+  initialX,
+  initialY,
+  initialRight,
+  initialBottom,
+}: Pick<DesktopIconProps, 'initialX' | 'initialY' | 'initialRight' | 'initialBottom'>) => {
+  if (typeof window === 'undefined') {
+    return { x: initialX ?? 16, y: initialY ?? 16 }
+  }
+
+  const x = initialRight === undefined
+    ? (initialX ?? 16)
+    : Math.max(0, window.innerWidth - ICON_WIDTH - initialRight)
+  const y = initialBottom === undefined
+    ? (initialY ?? 16)
+    : Math.max(0, window.innerHeight - ICON_HEIGHT - initialBottom)
+
+  return { x, y }
 }
 
 const Window = ({ title, onClose, children, icon, defaultPosition, zIndex, onFocus, width, height, minWidth = 320, minHeight = 220 }: WindowProps) => {
@@ -241,8 +268,10 @@ const DesktopIcon = ({
   icon,
   windowIcon,
   name,
+  desktopLabel,
   children,
   showOnDesktop = true,
+  openByDefault = false,
   onOpen,
   width,
   height,
@@ -250,20 +279,26 @@ const DesktopIcon = ({
   minHeight,
   initialX = 16,
   initialY = 16,
+  initialRight,
+  initialBottom,
 }: DesktopIconProps) => {
   const { openWindow, closeWindow, isWindowOpen, getWindowPosition, getWindowZIndex, bringToFront } = useWindowsStore()
   const { focus, restore } = useModal()
   const isOpen = isWindowOpen(name)
   const defaultPosition = getWindowPosition(name)
   const windowZIndex = getWindowZIndex(name)
-  const [position, setPosition] = useState({ x: initialX, y: initialY })
+  const [position, setPosition] = useState(() =>
+    getInitialPosition({ initialX, initialY, initialRight, initialBottom }),
+  )
   const [isDragging, setIsDragging] = useState(false)
   const dragRef = useRef<DragState | null>(null)
 
   useEffect(() => {
-    const ICON_WIDTH = 120
-    const ICON_HEIGHT = 120
+    if (!openByDefault) return
+    openWindow(name)
+  }, [name, openByDefault, openWindow])
 
+  useEffect(() => {
     const onPointerMove = (event: PointerEvent) => {
       const dragState = dragRef.current
       if (!dragState || dragState.pointerId !== event.pointerId) return
@@ -327,7 +362,7 @@ const DesktopIcon = ({
           }}
         >
           {sizedIcon(icon, 32)}
-          <p style={styles.iconName}>{name}</p>
+          <p style={styles.iconName}>{desktopLabel ?? name}</p>
         </div>
       )}
 

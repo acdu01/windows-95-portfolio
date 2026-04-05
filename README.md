@@ -50,3 +50,6 @@ npm run preview
 - [aconfuseddragon](https://aconfuseddragon.itch.io/windows-95-plus-1) for icon set/colors
 - [robokoboto](https://wall.alphacoders.com/big.php?i=964425) for wallpaper source
 
+## To Do:
+
+- add support for different themes with wallpapers

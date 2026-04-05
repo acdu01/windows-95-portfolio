@@ -106,7 +106,8 @@ function App() {
       <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
         <DesktopIcon
           icon={<img src={thisComputer} alt="My Computer icon" />}
-          name="My Computer"
+          name="Anna's Computer"
+          desktopLabel="Anna's PC"
           width={700}
           height={460}
           initialX={MAIN_COLUMN_X}
@@ -131,20 +132,21 @@ function App() {
           height={430}
           minWidth={330}
           minHeight={400}
-          initialX={MAIN_COLUMN_X}
-          initialY={ICON_Y + ICON_GAP_Y * 2}
+          initialRight={20}
+          initialY={ICON_Y}
         >
           <GamesHub />
         </DesktopIcon>
         <DesktopIcon
           icon={<img src={music} alt="Music icon" />}
           name="Music"
+          desktopLabel="Music Player"
           width={520}
           height={420}
           minWidth={MUSIC_PLAYER_MIN_WIDTH}
           minHeight={MUSIC_PLAYER_MIN_HEIGHT}
-          initialX={MAIN_COLUMN_X}
-          initialY={ICON_Y + ICON_GAP_Y * 3}
+          initialRight={20}
+          initialY={ICON_Y + ICON_GAP_Y}
         >
           <MusicPlayer />
         </DesktopIcon>
@@ -153,8 +155,8 @@ function App() {
           name="Thanks.txt"
           width={520}
           height={320}
-          initialX={MAIN_COLUMN_X}
-          initialY={ICON_Y + ICON_GAP_Y * 4}
+          initialRight={20}
+          initialBottom={184}
         >
           <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
             <h3 style={{ margin: 0 }}>Website Credit</h3>
@@ -180,7 +182,7 @@ function App() {
           minWidth={420}
           minHeight={280}
           initialX={MAIN_COLUMN_X}
-          initialY={ICON_Y + ICON_GAP_Y * 5}
+          initialY={ICON_Y + ICON_GAP_Y * 2}
         >
           <SettingsPanel />
         </DesktopIcon>
@@ -192,7 +194,7 @@ function App() {
           minWidth={380}
           minHeight={220}
           initialX={MAIN_COLUMN_X}
-          initialY={ICON_Y + ICON_GAP_Y * 6}
+          initialY={ICON_Y + ICON_GAP_Y * 3}
         >
           <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
             <h3 style={{ margin: 0 }}>Contact Me</h3>
@@ -219,6 +221,33 @@ function App() {
               <a href="https://www.annadu.org" target="_blank" rel="noreferrer">
                 annadu.org
               </a>
+            </p>
+          </div>
+        </DesktopIcon>
+        <DesktopIcon
+          icon={<img src={textfile} alt="Tutorial icon" />}
+          name="tutorial.txt"
+          width={420}
+          height={280}
+          minWidth={360}
+          minHeight={240}
+          initialRight={20}
+          initialBottom={64}
+          openByDefault
+        >
+          <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
+            <h3 style={{ margin: 0 }}>Quick Tutorial</h3>
+            <p style={{ margin: 0 }}>
+              Start with <strong>Projects</strong> to browse my previous work and open supporting files, or open <strong>Resume.doc</strong> for a quick overview.
+            </p>
+            <p style={{ margin: 0 }}>
+              Double-click desktop icons to open them, drag icons or window title bars to move them, resize windows from the bottom-right corner, and use the taskbar to switch between open windows.
+            </p>
+            <p style={{ margin: 0 }}>
+              <strong>Settings</strong> lets you change text size and swap between the default, Pink Sky, and Classic Blue wallpapers.
+            </p>
+            <p style={{ margin: 0 }}>
+              There are a few interactive extras too, including Minesweeper and Tic-Tac-Toe under <strong>Games</strong>.
             </p>
           </div>
         </DesktopIcon>
