@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react'
 import { useI18n } from '../i18n'
 
 function SettingsPanel() {
-  const { textSize, setTextSize, wallpaperMode, setWallpaperMode, language, setLanguage } = useSettingsStore()
+  const { textSize, setTextSize, iconSize, setIconSize, wallpaperMode, setWallpaperMode, language, setLanguage } = useSettingsStore()
   const { t } = useI18n()
 
   const buttonStyle = (active: boolean): CSSProperties => ({
@@ -70,6 +70,46 @@ function SettingsPanel() {
         >
           <div style={{ fontSize: `${textSize}px` }}>{t('settings.preview', { size: textSize })}</div>
         </div>
+      </div>
+
+      <div
+        style={{
+          display: 'grid',
+          gap: '8px',
+          padding: '8px',
+          background: 'var(--chrome-input-background)',
+          borderTop: '2px solid var(--chrome-dark)',
+          borderLeft: '2px solid var(--chrome-dark)',
+          borderRight: '2px solid var(--chrome-lightest)',
+          borderBottom: '2px solid var(--chrome-lightest)',
+        }}
+      >
+        <div style={{ fontSize: '12px', fontWeight: 700 }}>{t('settings.iconSize')}</div>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          <button type="button" style={buttonStyle(iconSize === 24)} onClick={() => setIconSize(24)}>
+            {t('settings.small')}
+          </button>
+          <button type="button" style={buttonStyle(iconSize === 32)} onClick={() => setIconSize(32)}>
+            {t('settings.normal')}
+          </button>
+          <button type="button" style={buttonStyle(iconSize === 40)} onClick={() => setIconSize(40)}>
+            {t('settings.large')}
+          </button>
+          <button type="button" style={buttonStyle(iconSize === 48)} onClick={() => setIconSize(48)}>
+            {t('settings.extraLarge')}
+          </button>
+        </div>
+
+        <label style={{ display: 'grid', gap: '6px' }}>
+          <span style={{ fontSize: '12px' }}>{t('settings.iconFineTune', { size: iconSize })}</span>
+          <input
+            type="range"
+            min={24}
+            max={48}
+            value={iconSize}
+            onChange={(event) => setIconSize(Number(event.target.value))}
+          />
+        </label>
       </div>
 
       <div

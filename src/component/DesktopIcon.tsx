@@ -1,5 +1,6 @@
 import React, { type ComponentType, type ReactElement, type ReactNode, useEffect, useRef, useState } from 'react'
 import { Modal, TitleBar, useModal } from '@react95/core'
+import { useSettingsStore } from '../store/settings'
 import { useWindowsStore } from '../store/windows'
 
 const styles = {
@@ -45,6 +46,7 @@ interface DesktopIconProps {
   windowIcon?: ReactElement
   name: string
   desktopLabel?: string
+  defaultWindowPosition?: { x: number; y: number }
   children: ReactNode
   showOnDesktop?: boolean
   openByDefault?: boolean
@@ -90,25 +92,27 @@ const sizedIcon = (icon: ReactElement, size: number): ReactElement => {
   })
 }
 
-const ICON_WIDTH = 120
-const ICON_HEIGHT = 120
-
 const getInitialPosition = ({
   initialX,
   initialY,
   initialRight,
   initialBottom,
-}: Pick<DesktopIconProps, 'initialX' | 'initialY' | 'initialRight' | 'initialBottom'>) => {
+  footprintWidth,
+  footprintHeight,
+}: Pick<DesktopIconProps, 'initialX' | 'initialY' | 'initialRight' | 'initialBottom'> & {
+  footprintWidth: number
+  footprintHeight: number
+}) => {
   if (typeof window === 'undefined') {
     return { x: initialX ?? 16, y: initialY ?? 16 }
   }
 
   const x = initialRight === undefined
     ? (initialX ?? 16)
-    : Math.max(0, window.innerWidth - ICON_WIDTH - initialRight)
+    : Math.max(0, window.innerWidth - footprintWidth - initialRight)
   const y = initialBottom === undefined
     ? (initialY ?? 16)
-    : Math.max(0, window.innerHeight - ICON_HEIGHT - initialBottom)
+    : Math.max(0, window.innerHeight - footprintHeight - initialBottom)
 
   return { x, y }
 }
@@ -269,6 +273,7 @@ const DesktopIcon = ({
   windowIcon,
   name,
   desktopLabel,
+  defaultWindowPosition,
   children,
   showOnDesktop = true,
   openByDefault = false,
@@ -283,28 +288,38 @@ const DesktopIcon = ({
   initialBottom,
 }: DesktopIconProps) => {
   const { openWindow, closeWindow, isWindowOpen, getWindowPosition, getWindowZIndex, bringToFront } = useWindowsStore()
+  const iconSize = useSettingsStore((state) => state.iconSize)
   const { focus, restore } = useModal()
   const isOpen = isWindowOpen(name)
   const defaultPosition = getWindowPosition(name)
   const windowZIndex = getWindowZIndex(name)
+  const footprintWidth = Math.max(100, iconSize + 44)
+  const footprintHeight = Math.max(120, iconSize + 70)
   const [position, setPosition] = useState(() =>
-    getInitialPosition({ initialX, initialY, initialRight, initialBottom }),
+    getInitialPosition({ initialX, initialY, initialRight, initialBottom, footprintWidth, footprintHeight }),
   )
   const [isDragging, setIsDragging] = useState(false)
   const dragRef = useRef<DragState | null>(null)
 
   useEffect(() => {
+    setPosition((current) => ({
+      x: Math.max(0, Math.min(Math.max(0, window.innerWidth - footprintWidth), current.x)),
+      y: Math.max(0, Math.min(Math.max(0, window.innerHeight - footprintHeight), current.y)),
+    }))
+  }, [footprintHeight, footprintWidth])
+
+  useEffect(() => {
     if (!openByDefault) return
-    openWindow(name)
-  }, [name, openByDefault, openWindow])
+    openWindow(name, defaultWindowPosition)
+  }, [defaultWindowPosition, name, openByDefault, openWindow])
 
   useEffect(() => {
     const onPointerMove = (event: PointerEvent) => {
       const dragState = dragRef.current
       if (!dragState || dragState.pointerId !== event.pointerId) return
 
-      const maxX = Math.max(0, window.innerWidth - ICON_WIDTH)
-      const maxY = Math.max(0, window.innerHeight - ICON_HEIGHT)
+      const maxX = Math.max(0, window.innerWidth - footprintWidth)
+      const maxY = Math.max(0, window.innerHeight - footprintHeight)
       const nextX = Math.max(0, Math.min(maxX, event.clientX - dragState.offsetX))
       const nextY = Math.max(0, Math.min(maxY, event.clientY - dragState.offsetY))
       setPosition({ x: nextX, y: nextY })
@@ -324,7 +339,7 @@ const DesktopIcon = ({
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerup', onPointerUp)
     }
-  }, [])
+  }, [footprintHeight, footprintWidth])
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return
@@ -345,6 +360,8 @@ const DesktopIcon = ({
         <div
           style={{
             ...styles.desktopIcon,
+          width: `${footprintWidth}px`,
+          minHeight: `${footprintHeight}px`,
           left: `${position.x}px`,
           top: `${position.y}px`,
           cursor: isDragging ? 'grabbing' : 'grab',
@@ -355,13 +372,13 @@ const DesktopIcon = ({
               onOpen()
               return
             }
-            openWindow(name)
+            openWindow(name, defaultWindowPosition)
             restore(name)
             focus(name)
             bringToFront(name)
           }}
         >
-          {sizedIcon(icon, 32)}
+          {sizedIcon(icon, iconSize)}
           <p style={styles.iconName}>{desktopLabel ?? name}</p>
         </div>
       )}

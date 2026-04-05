@@ -27,6 +27,8 @@ import { useSettingsStore } from './store/settings'
 import { useWindowsStore } from './store/windows'
 import { useI18n } from './i18n'
 
+const TUTORIAL_WINDOW_POSITION = { x: 290, y: 70 }
+
 function App() {
   const { openWindow } = useWindowsStore()
   const { textSize, wallpaperMode } = useSettingsStore()
@@ -239,6 +241,7 @@ function App() {
           icon={<img src={textfile} alt="Tutorial icon" />}
           name="tutorial.txt"
           desktopLabel={t('desktop.tutorial')}
+          defaultWindowPosition={TUTORIAL_WINDOW_POSITION}
           width={420}
           height={280}
           minWidth={360}
