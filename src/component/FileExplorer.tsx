@@ -1,4 +1,4 @@
-import { Frame } from '@react95/core'
+import { Frame } from '@react95/core/Frame'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import folderClosed from '../assets/folder_closed.png'
 import folderOpen from '../assets/folder_open.png'

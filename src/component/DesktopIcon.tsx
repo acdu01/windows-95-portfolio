@@ -1,5 +1,7 @@
 import React, { type ComponentType, type ReactElement, type ReactNode, useEffect, useRef, useState } from 'react'
-import { Modal, TitleBar, useModal } from '@react95/core'
+import { useModal } from '@react95/core'
+import { Modal } from '@react95/core/Modal'
+import { TitleBar } from '@react95/core/TitleBar'
 import { useSettingsStore } from '../store/settings'
 import { useWindowsStore } from '../store/windows'
 

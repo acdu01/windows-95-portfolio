@@ -1,4 +1,6 @@
-import { List, TaskBar, useModal } from '@react95/core'
+import { List } from '@react95/core/List'
+import { TaskBar } from '@react95/core/TaskBar'
+import { useModal } from '@react95/core'
 import { useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useWindowsStore } from '../store/windows'
@@ -160,6 +162,13 @@ function WindowBar() {
               onClick={() => openWindow('Settings')}
             >
               {t('windowBar.settings')}
+            </List.Item>
+            <List.Divider />
+            <List.Item
+              icon={<img src={thisComputer} alt="Restart" style={menuIconStyle} />}
+              onClick={() => window.location.reload()}
+            >
+              {t('windowBar.shutdown')}
             </List.Item>
           </List>
         }

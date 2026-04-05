@@ -1,4 +1,6 @@
-import { Fieldset, Tab, Tabs } from '@react95/core'
+import { Fieldset } from '@react95/core/Fieldset'
+import { Tab } from '@react95/core/Tab'
+import { Tabs } from '@react95/core/Tabs'
 import { useI18n } from '../i18n'
 
 const styles = {

@@ -22,13 +22,13 @@ import steam from './assets/steam.png'
 import music from './assets/music.png'
 import tools from './assets/tools.png'
 import mail from './assets/mail.png'
-import vaporwaveWallpaper from './assets/wallpapers/vaporwave_wallpaper.jpg'
-import classicBlueWallpaper from './assets/wallpapers/classic_blue.svg'
 import { useSettingsStore } from './store/settings'
 import { useWindowsStore } from './store/windows'
 import { useI18n } from './i18n'
 
 const TUTORIAL_WINDOW_POSITION = { x: 290, y: 70 }
+const vaporwaveWallpaperUrl = `${import.meta.env.BASE_URL}wallpapers/vaporwave_wallpaper.jpg`
+const classicBlueWallpaperUrl = `${import.meta.env.BASE_URL}wallpapers/classic_blue.svg`
 
 function App() {
   const { openWindow } = useWindowsStore()
@@ -86,7 +86,7 @@ function App() {
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       {wallpaperMode === 'image' ? (
         <img
-          src={vaporwaveWallpaper}
+          src={vaporwaveWallpaperUrl}
           alt="Vaporwave wallpaper"
           style={{
             position: 'absolute',
@@ -110,7 +110,7 @@ function App() {
           />
           {wallpaperMode === 'classic_blue' && (
             <img
-              src={classicBlueWallpaper}
+              src={classicBlueWallpaperUrl}
               alt="Classic Blue wallpaper"
               style={{
                 position: 'absolute',
