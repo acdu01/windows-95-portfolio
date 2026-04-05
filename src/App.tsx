@@ -32,13 +32,25 @@ const classicBlueWallpaperUrl = `${import.meta.env.BASE_URL}wallpapers/classic_b
 
 function App() {
   const { openWindow } = useWindowsStore()
-  const { textSize, wallpaperMode } = useSettingsStore()
+  const { textSize, wallpaperMode, iconSize } = useSettingsStore()
   const { t } = useI18n()
   const [projectsFolder, setProjectsFolder] = useState('Projects')
-  const PROJECTS_COLUMN_X = 150
+  const [viewportWidth, setViewportWidth] = useState(() =>
+    typeof window === 'undefined' ? 1280 : window.innerWidth,
+  )
   const MAIN_COLUMN_X = 16
+  const RIGHT_COLUMN_MARGIN = 20
   const ICON_Y = 16
   const ICON_GAP_Y = 88
+  const desktopIconFootprintWidth = Math.max(100, iconSize + 44)
+  const desktopColumnGap = Math.max(0, Math.min(34, Math.floor((viewportWidth - (MAIN_COLUMN_X * 2) - (desktopIconFootprintWidth * 3)) / 2)))
+  const PROJECTS_COLUMN_X = MAIN_COLUMN_X + desktopIconFootprintWidth + desktopColumnGap
+  const minimumRightColumnX = PROJECTS_COLUMN_X + desktopIconFootprintWidth + desktopColumnGap
+  const preferredRightColumnX = Math.max(
+    minimumRightColumnX,
+    viewportWidth - desktopIconFootprintWidth - RIGHT_COLUMN_MARGIN,
+  )
+  const RIGHT_COLUMN_X = preferredRightColumnX
   const open3DReconstructionBundle = useCallback(() => {
     setProjectsFolder('Projects/3D_Reconstruction')
     openWindow('Projects', { x: 110, y: 50 })
@@ -81,6 +93,13 @@ function App() {
   useEffect(() => {
     document.documentElement.dataset.uiTheme = wallpaperMode
   }, [wallpaperMode])
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth)
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
@@ -160,7 +179,7 @@ function App() {
           height={430}
           minWidth={330}
           minHeight={400}
-          initialRight={20}
+          initialX={RIGHT_COLUMN_X}
           initialY={ICON_Y}
         >
           <GamesHub />
@@ -173,7 +192,7 @@ function App() {
           height={420}
           minWidth={MUSIC_PLAYER_MIN_WIDTH}
           minHeight={MUSIC_PLAYER_MIN_HEIGHT}
-          initialRight={20}
+          initialX={RIGHT_COLUMN_X}
           initialY={ICON_Y + ICON_GAP_Y}
         >
           <MusicPlayer />
@@ -184,8 +203,8 @@ function App() {
           desktopLabel={t('desktop.thanks')}
           width={520}
           height={320}
-          initialRight={20}
-          initialBottom={184}
+          initialX={RIGHT_COLUMN_X}
+          initialY={ICON_Y + ICON_GAP_Y * 2}
         >
           <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
             <h3 style={{ margin: 0 }}>{t('thanks.title')}</h3>
@@ -264,8 +283,8 @@ function App() {
           height={280}
           minWidth={360}
           minHeight={240}
-          initialRight={20}
-          initialBottom={64}
+          initialX={RIGHT_COLUMN_X}
+          initialY={ICON_Y + ICON_GAP_Y * 3}
           openByDefault
         >
           <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>

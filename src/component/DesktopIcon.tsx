@@ -304,6 +304,12 @@ const DesktopIcon = ({
   const dragRef = useRef<DragState | null>(null)
 
   useEffect(() => {
+    setPosition(
+      getInitialPosition({ initialX, initialY, initialRight, initialBottom, footprintWidth, footprintHeight }),
+    )
+  }, [footprintHeight, footprintWidth, initialBottom, initialRight, initialX, initialY])
+
+  useEffect(() => {
     setPosition((current) => ({
       x: Math.max(0, Math.min(Math.max(0, window.innerWidth - footprintWidth), current.x)),
       y: Math.max(0, Math.min(Math.max(0, window.innerHeight - footprintHeight), current.y)),
