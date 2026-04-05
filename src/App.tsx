@@ -209,6 +209,12 @@ function App() {
               </a>
             </p>
             <p style={{ margin: 0 }}>
+              GitHub:{' '}
+              <a href="https://github.com/acdu01" target="_blank" rel="noreferrer">
+                github.com/acdu01
+              </a>
+            </p>
+            <p style={{ margin: 0 }}>
               Website:{' '}
               <a href="https://www.annadu.org" target="_blank" rel="noreferrer">
                 annadu.org
