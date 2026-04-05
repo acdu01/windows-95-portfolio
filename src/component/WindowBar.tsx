@@ -8,6 +8,7 @@ import textfile from '../assets/text_file_2.png'
 import steam from '../assets/steam.png'
 import music from '../assets/music.png'
 import tools from '../assets/tools.png'
+import { useI18n } from '../i18n'
 
 type BatteryManagerLike = {
   level: number
@@ -27,11 +28,11 @@ type BatteryState = {
 
 const styles = {
   menu: {
-    background: '#f7dce7',
-    borderTop: '2px solid #fff2f8',
-    borderLeft: '2px solid #fff2f8',
-    borderRight: '2px solid #b78ea0',
-    borderBottom: '2px solid #b78ea0',
+    background: 'var(--chrome-menu-background)',
+    borderTop: '2px solid var(--chrome-lightest)',
+    borderLeft: '2px solid var(--chrome-lightest)',
+    borderRight: '2px solid var(--chrome-menu-shadow)',
+    borderBottom: '2px solid var(--chrome-menu-shadow)',
   } as const,
   dateTimeBadge: {
     display: 'flex',
@@ -44,12 +45,12 @@ const styles = {
     zIndex: 30,
     height: '22px',
     boxSizing: 'border-box',
-    color: '#352b30',
-    background: '#d9c7cf',
-    borderTop: '2px solid #9d8a93',
-    borderLeft: '2px solid #9d8a93',
-    borderRight: '2px solid #f4ecef',
-    borderBottom: '2px solid #f4ecef',
+    color: 'var(--chrome-text)',
+    background: 'var(--chrome-material)',
+    borderTop: '2px solid var(--chrome-dark)',
+    borderLeft: '2px solid var(--chrome-dark)',
+    borderRight: '2px solid var(--chrome-lightest)',
+    borderBottom: '2px solid var(--chrome-lightest)',
     pointerEvents: 'none',
   } as const,
 } as const
@@ -58,7 +59,7 @@ const menuIconStyle = { width: '32px', height: '32px' } as const
 const batteryFillStyle = (level: number): CSSProperties => ({
   width: `${Math.max(0, Math.min(100, Math.round(level * 100)))}%`,
   height: '100%',
-  background: level <= 0.2 ? '#8f1d1d' : '#352b30',
+  background: level <= 0.2 ? '#8f1d1d' : 'var(--chrome-text)',
 })
 
 const formatRetroDate = (date: Date): string => {
@@ -71,6 +72,7 @@ const formatRetroDate = (date: Date): string => {
 function WindowBar() {
   const { openWindow, openWindows, windowStack, bringToFront } = useWindowsStore()
   const { restore, focus } = useModal()
+  const { t } = useI18n()
   const [now, setNow] = useState(() => new Date())
   const [battery, setBattery] = useState<BatteryState>({ level: null, charging: false })
 
@@ -121,43 +123,43 @@ function WindowBar() {
               icon={<img src={thisComputer} alt="My Computer" style={menuIconStyle} />}
               onClick={() => openWindow('My Computer')}
             >
-              My Computer
+              {t('windowBar.myComputer')}
             </List.Item>
             <List.Item
               icon={<img src={folderOpen} alt="Projects" style={menuIconStyle} />}
               onClick={() => openWindow('Projects')}
             >
-              Projects
+              {t('windowBar.projects')}
             </List.Item>
             <List.Item
               icon={<img src={textfile} alt="Resume" style={menuIconStyle} />}
               onClick={() => openWindow('Resume.doc')}
             >
-              Resume.doc
+              {t('windowBar.resume')}
             </List.Item>
             <List.Item
               icon={<img src={textfile} alt="Thanks" style={menuIconStyle} />}
               onClick={() => openWindow('Thanks.txt')}
             >
-              Thanks.txt
+              {t('windowBar.thanks')}
             </List.Item>
             <List.Item
               icon={<img src={steam} alt="Games" style={menuIconStyle} />}
               onClick={() => openWindow('Games')}
             >
-              Games
+              {t('windowBar.games')}
             </List.Item>
             <List.Item
               icon={<img src={music} alt="Music" style={menuIconStyle} />}
               onClick={() => openWindow('Music')}
             >
-              Music
+              {t('windowBar.music')}
             </List.Item>
             <List.Item
               icon={<img src={tools} alt="Settings" style={menuIconStyle} />}
               onClick={() => openWindow('Settings')}
             >
-              Settings
+              {t('windowBar.settings')}
             </List.Item>
           </List>
         }
@@ -169,15 +171,15 @@ function WindowBar() {
               style={{
                 width: '14px',
                 height: '8px',
-                border: '1px solid #352b30',
-                background: '#f4ecef',
+                border: '1px solid var(--chrome-text)',
+                background: 'var(--chrome-lightest)',
                 padding: '1px',
                 boxSizing: 'border-box',
               }}
             >
               <div style={batteryFillStyle(battery.level)} />
             </div>
-            <div style={{ width: '2px', height: '4px', background: '#352b30' }} />
+            <div style={{ width: '2px', height: '4px', background: 'var(--chrome-text)' }} />
             {battery.charging && <span style={{ fontSize: '10px', lineHeight: 1 }}>+</span>}
             <span style={{ marginLeft: '2px' }}>
               {`${Math.round(battery.level * 100)}%`}
@@ -224,12 +226,12 @@ function WindowBar() {
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                color: '#352b30',
-                background: isActive ? '#cfb9c3' : '#dfccd4',
-                borderTop: isActive ? '2px solid #8f7c85' : '2px solid #f8eef2',
-                borderLeft: isActive ? '2px solid #8f7c85' : '2px solid #f8eef2',
-                borderRight: isActive ? '2px solid #f8eef2' : '2px solid #9a8790',
-                borderBottom: isActive ? '2px solid #f8eef2' : '2px solid #9a8790',
+                color: 'var(--chrome-text)',
+                background: isActive ? 'var(--chrome-button-active)' : 'var(--chrome-button)',
+                borderTop: isActive ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+                borderLeft: isActive ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+                borderRight: isActive ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
+                borderBottom: isActive ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
               }}
               title={title}
             >

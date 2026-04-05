@@ -7,6 +7,7 @@ import textFile from '../assets/text_file.png'
 import textFile2 from '../assets/text_file_2.png'
 import sounds from '../assets/sounds.png'
 import search from '../assets/search.png'
+import { useI18n } from '../i18n'
 import { useMusicStore } from '../store/music'
 import { useWindowsStore } from '../store/windows'
 
@@ -196,6 +197,7 @@ interface FileExplorerProps {
 function FileExplorer({ initialFolder }: FileExplorerProps) {
   const { openWindow } = useWindowsStore()
   const { requestTrack } = useMusicStore()
+  const { t } = useI18n()
   const defaultFolder = useMemo(() => {
     if (!initialFolder) return 'Projects'
     return folderMap.has(initialFolder) ? initialFolder : 'Projects'
@@ -219,6 +221,51 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
     () => currentFolder.items.find((item) => item.name === selectedItemName) ?? null,
     [currentFolder.items, selectedItemName],
   )
+
+  const localizedFolderName = (folderName: string) => {
+    switch (folderName) {
+      case 'Projects':
+        return t('folder.projects')
+      case 'Documents':
+        return t('explorer.documents')
+      case 'Music':
+        return t('explorer.music')
+      case '3D_Reconstruction':
+        return t('folder.3d')
+      case 'MyoAmp':
+        return t('folder.myoamp')
+      case 'RNA_templates':
+        return t('folder.rna')
+      case 'Neural_Network_Teach_In':
+        return t('folder.nn')
+      case 'Terminal_The_Game':
+        return t('folder.terminal')
+      default:
+        return folderName
+    }
+  }
+
+  const localizedPreview = (itemName: string) => {
+    switch (itemName) {
+      case '3D_Reconstruction':
+        return t('project.3d')
+      case 'MyoAmp':
+        return t('project.myoamp')
+      case 'RNA_templates':
+        return t('project.rna')
+      case 'Neural_Network_Teach_In':
+        return t('project.nn')
+      case 'Terminal_The_Game':
+        return t('project.terminal')
+      default:
+        return null
+    }
+  }
+
+  const localizedPath = currentFolder.path
+    .split('/')
+    .map((segment) => localizedFolderName(segment))
+    .join(' / ')
 
   useEffect(() => {
     if (!isSearchOpen) return
@@ -266,7 +313,7 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
           type="button"
           onClick={() => setIsTreeOpen((value) => !value)}
           style={buttonStyle}
-          title={isTreeOpen ? 'Hide folder tree' : 'Show folder tree'}
+          title={isTreeOpen ? t('explorer.hideTree') : t('explorer.showTree')}
         >
           <img src={folderOpen} alt="" style={{ width: '16px', height: '16px' }} />
         </button>
@@ -274,7 +321,7 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
           type="button"
           onClick={toggleSearch}
           style={buttonStyle}
-          title="Toggle search"
+          title={t('explorer.toggleSearch')}
         >
           <img src={search} alt="" style={{ width: '16px', height: '16px' }} />
         </button>
@@ -286,7 +333,7 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
             setIsSearchOpen(false)
           }}
           style={buttonStyle}
-          title="Go to My Computer home"
+          title={t('explorer.goHome')}
         >
           <img src={thisComputer} alt="" style={{ width: '16px', height: '16px' }} />
         </button>
@@ -296,7 +343,7 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
             type="text"
             value={searchText}
             onChange={(event) => setSearchText(event.target.value)}
-            placeholder="Search this folder..."
+            placeholder={t('explorer.searchPlaceholder')}
             style={{
               width: '180px',
               marginLeft: '6px',
@@ -318,7 +365,7 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
           <Frame boxShadow="$in" style={styles.pane}>
             <div style={{ ...styles.folderRow, fontWeight: 700 }}>
               <img src={thisComputer} alt="" style={{ width: '16px', height: '16px' }} />
-              My Computer
+              {t('explorer.myComputer')}
             </div>
             {topLevelFolders.map((folderPath) => {
               const folder = folderMap.get(folderPath)
@@ -331,14 +378,14 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
                       background: activeFolder === folder.path ? '#cfb9c3' : 'transparent',
                     }}
                     onClick={() => setActiveFolder(folder.path)}
-                  >
-                    <img
-                      src={activeFolder === folder.path || activeFolder.startsWith(`${folder.path}/`) ? folderOpen : folderClosed}
-                      alt=""
-                      style={{ width: '16px', height: '16px' }}
-                    />
-                    {folder.name}
-                  </div>
+                    >
+                      <img
+                        src={activeFolder === folder.path || activeFolder.startsWith(`${folder.path}/`) ? folderOpen : folderClosed}
+                        alt=""
+                        style={{ width: '16px', height: '16px' }}
+                      />
+                      {localizedFolderName(folder.name)}
+                    </div>
                   {folder.path === 'Projects' && (activeFolder === 'Projects' || activeFolder.startsWith('Projects/')) && (
                     <>
                       {projectSubfolders.map((subfolderPath) => {
@@ -355,7 +402,7 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
                             onClick={() => setActiveFolder(subfolder.path)}
                           >
                             <img src={activeFolder === subfolder.path ? folderOpen : folderClosed} alt="" style={{ width: '16px', height: '16px' }} />
-                            {subfolder.name}
+                            {localizedFolderName(subfolder.name)}
                           </div>
                         )
                       })}
@@ -369,9 +416,9 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
 
         <Frame boxShadow="$in" style={styles.pane}>
           <div style={styles.tableHead}>
-            <span>Name</span>
-            <span>Size</span>
-            <span>Modified</span>
+            <span>{t('explorer.name')}</span>
+            <span>{t('explorer.size')}</span>
+            <span>{t('explorer.modified')}</span>
           </div>
           {filteredItems.map((item) => (
             <div
@@ -407,20 +454,22 @@ function FileExplorer({ initialFolder }: FileExplorerProps) {
             </div>
           ))}
           {filteredItems.length === 0 && (
-            <div style={{ padding: '8px', color: '#555' }}>No files found.</div>
+            <div style={{ padding: '8px', color: '#555' }}>{t('explorer.noFiles')}</div>
           )}
         </Frame>
       </div>
 
       {currentFolder.path === 'Projects' && selectedItem?.kind === 'folder' && selectedItem.preview && (
         <Frame boxShadow="$out" style={{ margin: '0 6px 6px 6px', padding: '6px 8px', background: '#f4ecef' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '4px' }}>Preview: {selectedItem.name}</div>
-          <div style={{ fontSize: '12px', lineHeight: 1.4 }}>{selectedItem.preview}</div>
+          <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '4px' }}>
+            {t('explorer.preview', { name: localizedFolderName(selectedItem.name) })}
+          </div>
+          <div style={{ fontSize: '12px', lineHeight: 1.4 }}>{localizedPreview(selectedItem.name) ?? selectedItem.preview}</div>
         </Frame>
       )}
 
       <Frame boxShadow="$out" style={styles.status}>
-        {currentFolder.items.length} object(s) in {currentFolder.path}
+        {t('explorer.status', { count: currentFolder.items.length, folder: localizedPath })}
       </Frame>
     </div>
   )

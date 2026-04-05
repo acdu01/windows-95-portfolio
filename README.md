@@ -12,7 +12,8 @@ It behaves like a mini desktop OS with draggable icons, overlapping windows, a t
 - Project showcase folders with overview text + attached assets (PDF/image)
 - Music player window with track selection
 - Games hub with Minesweeper and Tic-Tac-Toe
-- Settings panel for wallpaper and text-size controls
+- Settings panel for theme, text-size, and language controls
+- English/Chinese UI toggle for desktop labels, tutorial text, project copy, and resume tabs/content
 
 ## Tech Stack
 
@@ -28,6 +29,8 @@ It behaves like a mini desktop OS with draggable icons, overlapping windows, a t
 npm install
 npm run dev
 ```
+
+Open `Settings` on the desktop to toggle the interface language between English and Chinese.
 
 Build for production:
 
@@ -50,6 +53,7 @@ npm run preview
 - [aconfuseddragon](https://aconfuseddragon.itch.io/windows-95-plus-1) for icon set/colors
 - [robokoboto](https://wall.alphacoders.com/big.php?i=964425) for wallpaper source
 
-## To Do:
+## To Do
 
 - add support for different themes with wallpapers
+- update dates

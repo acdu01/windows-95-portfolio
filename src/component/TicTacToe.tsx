@@ -105,12 +105,13 @@ function TicTacToe() {
         : `Turn: ${turn}`
 
   const modeButtonStyle = (active: boolean): CSSProperties => ({
-    background: active ? '#cfb9c3' : '#dfccd4',
-    borderTop: active ? '2px solid #8f7c85' : '2px solid #f8eef2',
-    borderLeft: active ? '2px solid #8f7c85' : '2px solid #f8eef2',
-    borderRight: active ? '2px solid #f8eef2' : '2px solid #9a8790',
-    borderBottom: active ? '2px solid #f8eef2' : '2px solid #9a8790',
+    background: active ? 'var(--chrome-button-active)' : 'var(--chrome-button)',
+    borderTop: active ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+    borderLeft: active ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+    borderRight: active ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
+    borderBottom: active ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
     padding: '2px 8px',
+    color: 'var(--chrome-text)',
   })
 
   return (
@@ -143,13 +144,14 @@ function TicTacToe() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          background: '#d9c7cf',
+          background: 'var(--chrome-material)',
           padding: '6px 8px',
-          borderTop: '2px solid #f4ecef',
-          borderLeft: '2px solid #f4ecef',
-          borderRight: '2px solid #76666d',
-          borderBottom: '2px solid #76666d',
+          borderTop: '2px solid var(--chrome-lightest)',
+          borderLeft: '2px solid var(--chrome-lightest)',
+          borderRight: '2px solid var(--chrome-darkest)',
+          borderBottom: '2px solid var(--chrome-darkest)',
           minWidth: '220px',
+          color: 'var(--chrome-text)',
         }}
       >
         <span>{statusText}</span>
@@ -157,12 +159,13 @@ function TicTacToe() {
           type="button"
           onClick={resetGame}
           style={{
-            background: '#dfccd4',
-            borderTop: '2px solid #f8eef2',
-            borderLeft: '2px solid #f8eef2',
-            borderRight: '2px solid #9a8790',
-            borderBottom: '2px solid #9a8790',
+            background: 'var(--chrome-button)',
+            borderTop: '2px solid var(--chrome-lightest)',
+            borderLeft: '2px solid var(--chrome-lightest)',
+            borderRight: '2px solid var(--chrome-dark)',
+            borderBottom: '2px solid var(--chrome-dark)',
             padding: '2px 8px',
+            color: 'var(--chrome-text)',
           }}
         >
           New
@@ -175,12 +178,12 @@ function TicTacToe() {
           gridTemplateColumns: 'repeat(3, 54px)',
           gridTemplateRows: 'repeat(3, 54px)',
           gap: '3px',
-          background: '#bca9b2',
+          background: 'var(--chrome-light)',
           padding: '6px',
-          borderTop: '2px solid #76666d',
-          borderLeft: '2px solid #76666d',
-          borderRight: '2px solid #f4ecef',
-          borderBottom: '2px solid #f4ecef',
+          borderTop: '2px solid var(--chrome-darkest)',
+          borderLeft: '2px solid var(--chrome-darkest)',
+          borderRight: '2px solid var(--chrome-lightest)',
+          borderBottom: '2px solid var(--chrome-lightest)',
           width: 'fit-content',
         }}
       >
@@ -196,11 +199,11 @@ function TicTacToe() {
               fontSize: '22px',
               fontWeight: 700,
               color: cell === 'X' ? '#0000aa' : '#aa0000',
-              background: '#dfccd4',
-              borderTop: '2px solid #f8eef2',
-              borderLeft: '2px solid #f8eef2',
-              borderRight: '2px solid #9a8790',
-              borderBottom: '2px solid #9a8790',
+              background: 'var(--chrome-button)',
+              borderTop: '2px solid var(--chrome-lightest)',
+              borderLeft: '2px solid var(--chrome-lightest)',
+              borderRight: '2px solid var(--chrome-dark)',
+              borderBottom: '2px solid var(--chrome-dark)',
               opacity: isBotTurn ? 0.92 : 1,
             }}
           >

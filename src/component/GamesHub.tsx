@@ -9,12 +9,13 @@ function GamesHub() {
   const [mode, setMode] = useState<GameMode>('minesweeper')
 
   const tabButton = (active: boolean): CSSProperties => ({
-    background: active ? '#cfb9c3' : '#dfccd4',
-    borderTop: active ? '2px solid #8f7c85' : '2px solid #f8eef2',
-    borderLeft: active ? '2px solid #8f7c85' : '2px solid #f8eef2',
-    borderRight: active ? '2px solid #f8eef2' : '2px solid #9a8790',
-    borderBottom: active ? '2px solid #f8eef2' : '2px solid #9a8790',
+    background: active ? 'var(--chrome-button-active)' : 'var(--chrome-button)',
+    borderTop: active ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+    borderLeft: active ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+    borderRight: active ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
+    borderBottom: active ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
     padding: '2px 10px',
+    color: 'var(--chrome-text)',
   })
 
   return (

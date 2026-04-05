@@ -2,6 +2,44 @@
     user-select: none;
 }
 
+:root {
+    --chrome-material: #d9c7cf;
+    --chrome-lightest: #f4ecef;
+    --chrome-lighter: #e8dce1;
+    --chrome-light: #d6c3cb;
+    --chrome-dark: #9d8a93;
+    --chrome-darkest: #76666d;
+    --chrome-text: #352b30;
+    --chrome-text-disabled: #76666d;
+    --chrome-text-shadow: #e8dce1;
+    --chrome-input-background: #f4ecef;
+    --chrome-input-background-disabled: #dfd1d7;
+    --chrome-menu-background: #f7dce7;
+    --chrome-menu-shadow: #b78ea0;
+    --chrome-button-active: #cfb9c3;
+    --chrome-button: #dfccd4;
+    --chrome-button-shadow: #8f7c85;
+}
+
+:root[data-ui-theme='classic_blue'] {
+    --chrome-material: #bac7d8;
+    --chrome-lightest: #edf3fb;
+    --chrome-lighter: #dce6f2;
+    --chrome-light: #c8d5e4;
+    --chrome-dark: #7e8fa4;
+    --chrome-darkest: #5e6c82;
+    --chrome-text: #243241;
+    --chrome-text-disabled: #5e6c82;
+    --chrome-text-shadow: #dce6f2;
+    --chrome-input-background: #edf3fb;
+    --chrome-input-background-disabled: #d2dde9;
+    --chrome-menu-background: #d6e1f0;
+    --chrome-menu-shadow: #7388a3;
+    --chrome-button-active: #aebed4;
+    --chrome-button: #c9d6e6;
+    --chrome-button-shadow: #6f8097;
+}
+
 html, body, #root {
     margin: 0;
     width: 100%;
@@ -10,15 +48,15 @@ html, body, #root {
 }
 
 .pastel-taskbar {
-    --r95-color-material: #d9c7cf;
-    --r95-color-borderLightest: #f4ecef;
-    --r95-color-borderLighter: #e8dce1;
-    --r95-color-borderLight: #d6c3cb;
-    --r95-color-borderDark: #9d8a93;
-    --r95-color-borderDarkest: #76666d;
-    --r95-color-materialText: #352b30;
-    --r95-color-materialTextDisabled: #76666d;
-    --r95-color-materialTextDisabledShadow: #e8dce1;
+    --r95-color-material: var(--chrome-material);
+    --r95-color-borderLightest: var(--chrome-lightest);
+    --r95-color-borderLighter: var(--chrome-lighter);
+    --r95-color-borderLight: var(--chrome-light);
+    --r95-color-borderDark: var(--chrome-dark);
+    --r95-color-borderDarkest: var(--chrome-darkest);
+    --r95-color-materialText: var(--chrome-text);
+    --r95-color-materialTextDisabled: var(--chrome-text-disabled);
+    --r95-color-materialTextDisabledShadow: var(--chrome-text-shadow);
 }
 
 .pastel-taskbar > :last-child {
@@ -30,30 +68,30 @@ html, body, #root {
 }
 
 .pastel-window {
-    --r95-color-material: #d9c7cf;
-    --r95-color-borderLightest: #f4ecef;
-    --r95-color-borderLighter: #e8dce1;
-    --r95-color-borderLight: #d6c3cb;
-    --r95-color-borderDark: #9d8a93;
-    --r95-color-borderDarkest: #76666d;
-    --r95-color-materialText: #352b30;
-    --r95-color-materialTextDisabled: #76666d;
-    --r95-color-materialTextDisabledShadow: #e8dce1;
-    --r95-color-inputBackground: #f4ecef;
-    --r95-color-inputBackgroundDisabled: #dfd1d7;
+    --r95-color-material: var(--chrome-material);
+    --r95-color-borderLightest: var(--chrome-lightest);
+    --r95-color-borderLighter: var(--chrome-lighter);
+    --r95-color-borderLight: var(--chrome-light);
+    --r95-color-borderDark: var(--chrome-dark);
+    --r95-color-borderDarkest: var(--chrome-darkest);
+    --r95-color-materialText: var(--chrome-text);
+    --r95-color-materialTextDisabled: var(--chrome-text-disabled);
+    --r95-color-materialTextDisabledShadow: var(--chrome-text-shadow);
+    --r95-color-inputBackground: var(--chrome-input-background);
+    --r95-color-inputBackgroundDisabled: var(--chrome-input-background-disabled);
 }
 
 .start-menu-list {
-    background: #d9c7cf !important;
+    background: var(--chrome-material) !important;
 }
 
 .start-menu-list li {
     padding-inline-start: 12px !important;
-    background: #d9c7cf !important;
+    background: var(--chrome-material) !important;
 }
 
 .start-menu-list li:hover {
-    background: #e8dce1 !important;
+    background: var(--chrome-lighter) !important;
 }
 
 .resume-page legend {

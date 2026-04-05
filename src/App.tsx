@@ -25,10 +25,12 @@ import mail from './assets/mail.png'
 import wallpaper from './assets/wallpapers/wallpaper.jpg'
 import { useSettingsStore } from './store/settings'
 import { useWindowsStore } from './store/windows'
+import { useI18n } from './i18n'
 
 function App() {
   const { openWindow } = useWindowsStore()
   const { textSize, wallpaperMode } = useSettingsStore()
+  const { t } = useI18n()
   const [projectsFolder, setProjectsFolder] = useState('Projects')
   const PROJECTS_COLUMN_X = 150
   const MAIN_COLUMN_X = 16
@@ -73,6 +75,10 @@ function App() {
     document.documentElement.style.setProperty('--desktop-icon-font-size', `${Math.max(12, textSize)}px`)
   }, [textSize])
 
+  useEffect(() => {
+    document.documentElement.dataset.uiTheme = wallpaperMode
+  }, [wallpaperMode])
+
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       {wallpaperMode === 'image' ? (
@@ -107,7 +113,7 @@ function App() {
         <DesktopIcon
           icon={<img src={thisComputer} alt="My Computer icon" />}
           name="Anna's Computer"
-          desktopLabel="Anna's PC"
+          desktopLabel={t('desktop.pc')}
           width={700}
           height={460}
           initialX={MAIN_COLUMN_X}
@@ -118,6 +124,7 @@ function App() {
         <DesktopIcon
           icon={<img src={textfile} alt="Resume icon" />}
           name="Resume.doc"
+          desktopLabel={t('desktop.resume')}
           width={700}
           height={460}
           initialX={MAIN_COLUMN_X}
@@ -128,6 +135,7 @@ function App() {
         <DesktopIcon
           icon={<img src={steam} alt="Games icon" />}
           name="Games"
+          desktopLabel={t('desktop.games')}
           width={360}
           height={430}
           minWidth={330}
@@ -140,7 +148,7 @@ function App() {
         <DesktopIcon
           icon={<img src={music} alt="Music icon" />}
           name="Music"
-          desktopLabel="Music Player"
+          desktopLabel={t('desktop.music')}
           width={520}
           height={420}
           minWidth={MUSIC_PLAYER_MIN_WIDTH}
@@ -153,30 +161,32 @@ function App() {
         <DesktopIcon
           icon={<img src={textfile} alt="Thanks icon" />}
           name="Thanks.txt"
+          desktopLabel={t('desktop.thanks')}
           width={520}
           height={320}
           initialRight={20}
           initialBottom={184}
         >
           <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
-            <h3 style={{ margin: 0 }}>Website Credit</h3>
+            <h3 style={{ margin: 0 }}>{t('thanks.title')}</h3>
             <p style={{ margin: 0 }}>
-              <a href="https://www.youtube.com/watch?v=NXXw5sYg71I" target="_blank" rel="noreferrer">Code with Ali</a> for inspiration.
+              <a href="https://www.youtube.com/watch?v=NXXw5sYg71I" target="_blank" rel="noreferrer">Code with Ali</a> {t('thanks.inspirationSuffix')}
             </p>
             <p style={{ margin: 0 }}>
-              <a href="https://aconfuseddragon.itch.io/windows-95-plus-1" target="_blank" rel="noreferrer">aconfuseddragon</a> for icons.
+              <a href="https://aconfuseddragon.itch.io/windows-95-plus-1" target="_blank" rel="noreferrer">aconfuseddragon</a> {t('thanks.iconsSuffix')}
             </p>
             <p style={{ margin: 0 }}>
-              <a href="https://wall.alphacoders.com/big.php?i=964425" target="_blank" rel="noreferrer">robokoboto</a> for the wallpaper.
+              <a href="https://wall.alphacoders.com/big.php?i=964425" target="_blank" rel="noreferrer">robokoboto</a> {t('thanks.wallpaperSuffix')}
             </p>
             <p style={{ margin: 0 }}>
-              Windows 95 may predate me, but the nostalgia is intentional.
+              {t('thanks.note')}
             </p>
           </div>
         </DesktopIcon>
         <DesktopIcon
           icon={<img src={tools} alt="Settings icon" />}
           name="Settings"
+          desktopLabel={t('desktop.settings')}
           width={520}
           height={340}
           minWidth={420}
@@ -189,6 +199,7 @@ function App() {
         <DesktopIcon
           icon={<img src={mail} alt="Contact icon" />}
           name="Contact"
+          desktopLabel={t('desktop.contact')}
           width={520}
           height={280}
           minWidth={380}
@@ -197,27 +208,27 @@ function App() {
           initialY={ICON_Y + ICON_GAP_Y * 3}
         >
           <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
-            <h3 style={{ margin: 0 }}>Contact Me</h3>
+            <h3 style={{ margin: 0 }}>{t('contact.title')}</h3>
             <p style={{ margin: 0 }}>
-              Email:{' '}
+              {t('contact.email')}{' '}
               <a href="mailto:annacdu1@gmail.com">
                 annacdu1@gmail.com
               </a>
             </p>
             <p style={{ margin: 0 }}>
-              LinkedIn:{' '}
+              {t('contact.linkedin')}{' '}
               <a href="https://www.linkedin.com/in/annacdu/" target="_blank" rel="noreferrer">
                 linkedin.com/in/annacdu
               </a>
             </p>
             <p style={{ margin: 0 }}>
-              GitHub:{' '}
+              {t('contact.github')}{' '}
               <a href="https://github.com/acdu01" target="_blank" rel="noreferrer">
                 github.com/acdu01
               </a>
             </p>
             <p style={{ margin: 0 }}>
-              Website:{' '}
+              {t('contact.website')}{' '}
               <a href="https://www.annadu.org" target="_blank" rel="noreferrer">
                 annadu.org
               </a>
@@ -227,6 +238,7 @@ function App() {
         <DesktopIcon
           icon={<img src={textfile} alt="Tutorial icon" />}
           name="tutorial.txt"
+          desktopLabel={t('desktop.tutorial')}
           width={420}
           height={280}
           minWidth={360}
@@ -236,24 +248,25 @@ function App() {
           openByDefault
         >
           <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
-            <h3 style={{ margin: 0 }}>Quick Tutorial</h3>
+            <h3 style={{ margin: 0 }}>{t('tutorial.title')}</h3>
             <p style={{ margin: 0 }}>
-              Start with <strong>Projects</strong> to browse my previous work and open supporting files, or open <strong>Resume.doc</strong> for a quick overview.
+              {t('tutorial.projects')}
             </p>
             <p style={{ margin: 0 }}>
-              Double-click desktop icons to open them, drag icons or window title bars to move them, resize windows from the bottom-right corner, and use the taskbar to switch between open windows.
+              {t('tutorial.desktop')}
             </p>
             <p style={{ margin: 0 }}>
-              <strong>Settings</strong> lets you change text size and swap between the default, Pink Sky, and Classic Blue wallpapers.
+              {t('tutorial.settings')}
             </p>
             <p style={{ margin: 0 }}>
-              There are a few interactive extras too, including Minesweeper and Tic-Tac-Toe under <strong>Games</strong>.
+              {t('tutorial.games')}
             </p>
           </div>
         </DesktopIcon>
         <DesktopIcon
           icon={<img src={folderOpen} alt="Projects icon" />}
           name="Projects"
+          desktopLabel={t('desktop.projects')}
           onOpen={openProjectsRoot}
           width={700}
           height={460}
@@ -266,6 +279,7 @@ function App() {
           icon={<img src={folderOpen} alt="3D Reconstruction folder icon" />}
           windowIcon={<img src={textfile} alt="3D Reconstruction overview icon" />}
           name="3D_Reconstruction"
+          desktopLabel={t('desktop.3d')}
           onOpen={open3DReconstructionBundle}
           width={700}
           height={460}
@@ -280,6 +294,7 @@ function App() {
           icon={<img src={folderOpen} alt="MyoAmp folder icon" />}
           windowIcon={<img src={textfile} alt="MyoAmp overview icon" />}
           name="MyoAmp"
+          desktopLabel={t('desktop.myoamp')}
           onOpen={openMyoAmpBundle}
           width={700}
           height={460}
@@ -294,6 +309,7 @@ function App() {
           icon={<img src={folderOpen} alt="RNA templates folder icon" />}
           windowIcon={<img src={textfile} alt="RNA templates overview icon" />}
           name="RNA_templates"
+          desktopLabel={t('desktop.rna')}
           onOpen={openCarbonRnaTemplatesBundle}
           width={760}
           height={500}
@@ -308,6 +324,7 @@ function App() {
           icon={<img src={folderOpen} alt="Neural Network Teach In folder icon" />}
           windowIcon={<img src={textfile} alt="Neural Network Teach In overview icon" />}
           name="Neural_Network_Teach_In"
+          desktopLabel={t('desktop.nn')}
           onOpen={openNeuralNetworkTeachInBundle}
           width={760}
           height={500}
@@ -322,6 +339,7 @@ function App() {
           icon={<img src={folderOpen} alt="Terminal The Game folder icon" />}
           windowIcon={<img src={textfile} alt="Terminal The Game overview icon" />}
           name="Terminal_The_Game"
+          desktopLabel={t('desktop.terminal')}
           onOpen={openTerminalTheGameBundle}
           width={760}
           height={500}

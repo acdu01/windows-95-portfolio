@@ -174,13 +174,14 @@ function Minesweeper() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          background: '#d9c7cf',
+          background: 'var(--chrome-material)',
           padding: '6px 8px',
-          borderTop: '2px solid #f4ecef',
-          borderLeft: '2px solid #f4ecef',
-          borderRight: '2px solid #76666d',
-          borderBottom: '2px solid #76666d',
+          borderTop: '2px solid var(--chrome-lightest)',
+          borderLeft: '2px solid var(--chrome-lightest)',
+          borderRight: '2px solid var(--chrome-darkest)',
+          borderBottom: '2px solid var(--chrome-darkest)',
           minWidth: '240px',
+          color: 'var(--chrome-text)',
         }}
       >
         <span>Mines left: {Math.max(0, MINES - flaggedCount)}</span>
@@ -189,12 +190,13 @@ function Minesweeper() {
             type="button"
             onClick={() => setFlagMode((value) => !value)}
             style={{
-              background: flagMode ? '#cfb9c3' : '#dfccd4',
-              borderTop: flagMode ? '2px solid #8f7c85' : '2px solid #f8eef2',
-              borderLeft: flagMode ? '2px solid #8f7c85' : '2px solid #f8eef2',
-              borderRight: flagMode ? '2px solid #f8eef2' : '2px solid #9a8790',
-              borderBottom: flagMode ? '2px solid #f8eef2' : '2px solid #9a8790',
+              background: flagMode ? 'var(--chrome-button-active)' : 'var(--chrome-button)',
+              borderTop: flagMode ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+              borderLeft: flagMode ? '2px solid var(--chrome-button-shadow)' : '2px solid var(--chrome-lightest)',
+              borderRight: flagMode ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
+              borderBottom: flagMode ? '2px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
               padding: '2px 8px',
+              color: 'var(--chrome-text)',
             }}
           >
             Flag
@@ -203,12 +205,13 @@ function Minesweeper() {
             type="button"
             onClick={resetGame}
             style={{
-              background: '#dfccd4',
-              borderTop: '2px solid #f8eef2',
-              borderLeft: '2px solid #f8eef2',
-              borderRight: '2px solid #9a8790',
-              borderBottom: '2px solid #9a8790',
+              background: 'var(--chrome-button)',
+              borderTop: '2px solid var(--chrome-lightest)',
+              borderLeft: '2px solid var(--chrome-lightest)',
+              borderRight: '2px solid var(--chrome-dark)',
+              borderBottom: '2px solid var(--chrome-dark)',
               padding: '2px 8px',
+              color: 'var(--chrome-text)',
             }}
           >
             New
@@ -222,12 +225,12 @@ function Minesweeper() {
           gridTemplateColumns: `repeat(${COLS}, 26px)`,
           gridTemplateRows: `repeat(${ROWS}, 26px)`,
           gap: '2px',
-          background: '#bca9b2',
+          background: 'var(--chrome-light)',
           padding: '6px',
-          borderTop: '2px solid #76666d',
-          borderLeft: '2px solid #76666d',
-          borderRight: '2px solid #f4ecef',
-          borderBottom: '2px solid #f4ecef',
+          borderTop: '2px solid var(--chrome-darkest)',
+          borderLeft: '2px solid var(--chrome-darkest)',
+          borderRight: '2px solid var(--chrome-lightest)',
+          borderBottom: '2px solid var(--chrome-lightest)',
           width: 'fit-content',
         }}
       >
@@ -264,11 +267,11 @@ function Minesweeper() {
                     : cell.isMine && cell.isRevealed
                       ? '#aa0000'
                       : numberColors[cell.adjacentMines] ?? '#000',
-                  background: cell.isRevealed ? '#e8dce1' : '#dfccd4',
-                  borderTop: cell.isRevealed ? '1px solid #9a8790' : '2px solid #f8eef2',
-                  borderLeft: cell.isRevealed ? '1px solid #9a8790' : '2px solid #f8eef2',
-                  borderRight: cell.isRevealed ? '1px solid #f8eef2' : '2px solid #9a8790',
-                  borderBottom: cell.isRevealed ? '1px solid #f8eef2' : '2px solid #9a8790',
+                  background: cell.isRevealed ? 'var(--chrome-lighter)' : 'var(--chrome-button)',
+                  borderTop: cell.isRevealed ? '1px solid var(--chrome-dark)' : '2px solid var(--chrome-lightest)',
+                  borderLeft: cell.isRevealed ? '1px solid var(--chrome-dark)' : '2px solid var(--chrome-lightest)',
+                  borderRight: cell.isRevealed ? '1px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
+                  borderBottom: cell.isRevealed ? '1px solid var(--chrome-lightest)' : '2px solid var(--chrome-dark)',
                 }}
               >
                 {label}
@@ -278,7 +281,7 @@ function Minesweeper() {
         )}
       </div>
 
-      <div style={{ fontSize: '12px' }}>
+      <div style={{ fontSize: '12px', color: 'var(--chrome-text)' }}>
         {statusText} {flagMode ? 'Flag mode is on.' : 'Right-click or use Flag mode to place flags.'}
       </div>
     </div>
