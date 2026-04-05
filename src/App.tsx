@@ -22,7 +22,8 @@ import steam from './assets/steam.png'
 import music from './assets/music.png'
 import tools from './assets/tools.png'
 import mail from './assets/mail.png'
-import wallpaper from './assets/wallpapers/wallpaper.jpg'
+import vaporwaveWallpaper from './assets/wallpapers/vaporwave_wallpaper.jpg'
+import classicBlueWallpaper from './assets/wallpapers/classic_blue.svg'
 import { useSettingsStore } from './store/settings'
 import { useWindowsStore } from './store/windows'
 import { useI18n } from './i18n'
@@ -85,8 +86,8 @@ function App() {
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       {wallpaperMode === 'image' ? (
         <img
-          src={wallpaper}
-          alt="Wallpaper"
+          src={vaporwaveWallpaper}
+          alt="Vaporwave wallpaper"
           style={{
             position: 'absolute',
             inset: 0,
@@ -98,17 +99,34 @@ function App() {
           }}
         />
       ) : (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 0,
-            background:
-              wallpaperMode === 'pink_sky'
-                ? 'linear-gradient(160deg, #ffd9e6 0%, #f8c9da 35%, #f4d7f8 100%)'
-                : 'linear-gradient(160deg, #0f3f8f 0%, #1e66cc 55%, #7ea9e8 100%)',
-          }}
-        />
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 0,
+              background: 'linear-gradient(160deg, #0f3f8f 0%, #1e66cc 55%, #7ea9e8 100%)',
+            }}
+          />
+          {wallpaperMode === 'classic_blue' && (
+            <img
+              src={classicBlueWallpaper}
+              alt="Classic Blue wallpaper"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: '50%',
+                height: '50%',
+                transform: 'translate(-50%, -50%)',
+                objectFit: 'contain',
+                display: 'block',
+                zIndex: 0,
+                pointerEvents: 'none',
+              }}
+            />
+          )}
+        </>
       )}
 
       <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>

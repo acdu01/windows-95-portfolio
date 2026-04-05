@@ -129,9 +129,6 @@ function SettingsPanel() {
           <button type="button" style={buttonStyle(wallpaperMode === 'image')} onClick={() => setWallpaperMode('image')}>
             {t('settings.default')}
           </button>
-          <button type="button" style={buttonStyle(wallpaperMode === 'pink_sky')} onClick={() => setWallpaperMode('pink_sky')}>
-            {t('settings.pinkSky')}
-          </button>
           <button type="button" style={buttonStyle(wallpaperMode === 'classic_blue')} onClick={() => setWallpaperMode('classic_blue')}>
             {t('settings.classicBlue')}
           </button>

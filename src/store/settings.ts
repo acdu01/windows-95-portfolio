@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type WallpaperMode = 'image' | 'pink_sky' | 'classic_blue'
+export type WallpaperMode = 'image' | 'classic_blue'
 export type Language = 'en' | 'zh'
 
 interface SettingsStore {
