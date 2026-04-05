@@ -21,6 +21,7 @@ import textfile from './assets/text_file_2.png'
 import steam from './assets/steam.png'
 import music from './assets/music.png'
 import tools from './assets/tools.png'
+import mail from './assets/mail.png'
 import wallpaper from './assets/wallpapers/wallpaper.jpg'
 import { useSettingsStore } from './store/settings'
 import { useWindowsStore } from './store/windows'
@@ -182,6 +183,38 @@ function App() {
           initialY={ICON_Y + ICON_GAP_Y * 5}
         >
           <SettingsPanel />
+        </DesktopIcon>
+        <DesktopIcon
+          icon={<img src={mail} alt="Contact icon" />}
+          name="Contact"
+          width={520}
+          height={280}
+          minWidth={380}
+          minHeight={220}
+          initialX={MAIN_COLUMN_X}
+          initialY={ICON_Y + ICON_GAP_Y * 6}
+        >
+          <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
+            <h3 style={{ margin: 0 }}>Contact Me</h3>
+            <p style={{ margin: 0 }}>
+              Email:{' '}
+              <a href="mailto:annacdu1@gmail.com">
+                annacdu1@gmail.com
+              </a>
+            </p>
+            <p style={{ margin: 0 }}>
+              LinkedIn:{' '}
+              <a href="https://www.linkedin.com/in/annacdu/" target="_blank" rel="noreferrer">
+                linkedin.com/in/annacdu
+              </a>
+            </p>
+            <p style={{ margin: 0 }}>
+              Website:{' '}
+              <a href="https://www.annadu.org" target="_blank" rel="noreferrer">
+                annadu.org
+              </a>
+            </p>
+          </div>
         </DesktopIcon>
         <DesktopIcon
           icon={<img src={folderOpen} alt="Projects icon" />}
