@@ -1,0 +1,135 @@
+*{
+    user-select: none;
+}
+
+html, body, #root {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-size: var(--portfolio-text-size, 14px);
+}
+
+.pastel-taskbar {
+    --r95-color-material: #d9c7cf;
+    --r95-color-borderLightest: #f4ecef;
+    --r95-color-borderLighter: #e8dce1;
+    --r95-color-borderLight: #d6c3cb;
+    --r95-color-borderDark: #9d8a93;
+    --r95-color-borderDarkest: #76666d;
+    --r95-color-materialText: #352b30;
+    --r95-color-materialTextDisabled: #76666d;
+    --r95-color-materialTextDisabledShadow: #e8dce1;
+}
+
+.pastel-taskbar > :last-child {
+    display: none !important;
+}
+
+.pastel-taskbar > :nth-last-child(2) {
+    display: none !important;
+}
+
+.pastel-window {
+    --r95-color-material: #d9c7cf;
+    --r95-color-borderLightest: #f4ecef;
+    --r95-color-borderLighter: #e8dce1;
+    --r95-color-borderLight: #d6c3cb;
+    --r95-color-borderDark: #9d8a93;
+    --r95-color-borderDarkest: #76666d;
+    --r95-color-materialText: #352b30;
+    --r95-color-materialTextDisabled: #76666d;
+    --r95-color-materialTextDisabledShadow: #e8dce1;
+    --r95-color-inputBackground: #f4ecef;
+    --r95-color-inputBackgroundDisabled: #dfd1d7;
+}
+
+.start-menu-list {
+    background: #d9c7cf !important;
+}
+
+.start-menu-list li {
+    padding-inline-start: 12px !important;
+    background: #d9c7cf !important;
+}
+
+.start-menu-list li:hover {
+    background: #e8dce1 !important;
+}
+
+.resume-page legend {
+    font-weight: 700;
+}
+
+/* === Display === */
+.hidden               { display: none; }
+.block                { display: block; }
+.inline-block         { display: inline-block; }
+.inline               { display: inline; }
+.flex                 { display: flex; }
+.inline-flex          { display: inline-flex; }
+.grid                 { display: grid; }
+.inline-grid          { display: inline-grid; }
+.contents             { display: contents; }
+.table                { display: table; }
+
+/* === Position === */
+.static               { position: static; }
+.relative             { position: relative; }
+.absolute             { position: absolute; }
+.fixed                { position: fixed; }
+.sticky               { position: sticky; }
+
+/* === Top / Right / Bottom / Left === */
+.top-0                { top: 0px; }
+.right-0              { right: 0px; }
+.bottom-0             { bottom: 0px; }
+.left-0               { left: 0px; }
+
+.inset-0              { top: 0; right: 0; bottom: 0; left: 0; }
+.inset-x-0            { left: 0; right: 0; }
+.inset-y-0            { top: 0; bottom: 0; }
+
+.top-half              { top: 50% !important; }
+.left-half          { left: 50% !important; }
+
+.-translate-x-half     { transform: translateX(-50%) !important; }
+.-translate-y-half     { transform: translateY(-50%) !important; }
+.translate  {translate: -50%;}
+.translate-x-full     { transform: translateX(100%); }
+.translate-y-full     { transform: translateY(100%); }
+
+/* === Z-Index === */
+.z-0                  { z-index: 0; }
+.z-10                 { z-index: 10; }
+.z-20                 { z-index: 20; }
+.z-30                 { z-index: 30; }
+.z-40                 { z-index: 40; }
+.z-50                 { z-index: 50; }
+.z-auto               { z-index: auto; }
+
+/* === Flex Utilities (for layout) === */
+.flex-row             { flex-direction: row; }
+.flex-col             { flex-direction: column; }
+.items-center         { align-items: center; }
+.justify-center       { justify-content: center; }
+.justify-between      { justify-content: space-between; }
+.justify-around       { justify-content: space-around; }
+.justify-end          { justify-content: flex-end; }
+
+/* === Align (vertical alignment for inline elements) === */
+.align-top            { vertical-align: top; }
+.align-middle         { vertical-align: middle; }
+.align-bottom         { vertical-align: bottom; }
+
+
+.gap-0                { gap: 0px; }
+.gap-1                { gap: 0.25rem; /* 4px */ }
+.gap-2                { gap: 0.5rem;  /* 8px */ }
+.gap-3                { gap: 0.75rem; /* 12px */ }
+.gap-4                { gap: 1rem;    /* 16px */ }
+.gap-6                { gap: 1.5rem;  /* 24px */ }
+.gap-8                { gap: 2rem;    /* 32px */ }
+.gap-10               { gap: 2.5rem;  /* 40px */ }
+
+.gap-x-4              { column-gap: 1rem; }
+.gap-y-4              { row-gap: 1rem; }
