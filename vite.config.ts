@@ -4,7 +4,8 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/windows-95-portfolio/',
+  // The custom domain serves the site from the domain root.
+  base: '/',
   build: {
     rollupOptions: {
       output: {

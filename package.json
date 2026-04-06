@@ -2,7 +2,7 @@
   "name": "portfolio",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://acdu01.github.io/windows-95-portfolio",
+  "homepage": "https://portfolio.annadu.org",
   "type": "module",
   "scripts": {
     "dev": "vite",
