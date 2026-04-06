@@ -4,6 +4,8 @@ A retro Windows 95-style portfolio built with React + TypeScript + Vite.
 
 It behaves like a mini desktop OS with draggable icons, overlapping windows, a taskbar/start menu, and project folders that open into overview files, PDFs, links, and media.
 
+Live site: [portfolio.annadu.org](https://portfolio.annadu.org/)
+
 ## Features
 
 - Windows 95 desktop UI with draggable/resizable windows
