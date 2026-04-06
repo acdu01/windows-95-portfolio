@@ -77,6 +77,31 @@ type ResizeState = {
   startHeight: number
 }
 
+type WindowPosition = {
+  x: number
+  y: number
+}
+
+type FullscreenRestoreDragState = {
+  pointerId: number
+  startX: number
+  startY: number
+  active: boolean
+  offsetX: number
+  offsetY: number
+}
+
+type ControlledDragData = {
+  offsetX: number
+  offsetY: number
+}
+
+const WINDOW_TOP_OFFSET = 50
+const FULLSCREEN_HORIZONTAL_CHROME = 16
+const FULLSCREEN_VERTICAL_CHROME = 56
+const RESTORE_DRAG_THRESHOLD = 6
+const RESTORE_POINTER_OFFSET_Y = 18
+
 const sizedIcon = (icon: ReactElement, size: number): ReactElement => {
   if (typeof icon.type === 'string' && icon.type === 'img') {
     return React.cloneElement(icon as ReactElement<{ style?: React.CSSProperties }>, {
@@ -119,15 +144,26 @@ const getInitialPosition = ({
   return { x, y }
 }
 
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
+
 const Window = ({ title, onClose, children, icon, defaultPosition, zIndex, onFocus, width, height, minWidth = 320, minHeight = 220 }: WindowProps) => {
   const { minimize, subscribe, focus } = useModal()
   const [size, setSize] = useState(() => ({
     width: Math.max(minWidth, width ?? 640),
     height: Math.max(minHeight, height ?? 420),
   }))
+  const [dragPosition, setDragPosition] = useState<WindowPosition>(() => defaultPosition ?? { x: 0, y: 0 })
   const [isFullscreen, setIsFullscreen] = useState(false)
   const previousSizeRef = useRef(size)
+  const previousPositionRef = useRef<WindowPosition>(defaultPosition ?? { x: 0, y: 0 })
   const resizeRef = useRef<ResizeState | null>(null)
+  const fullscreenRestoreDragRef = useRef<FullscreenRestoreDragState | null>(null)
+
+  useEffect(() => {
+    if (!defaultPosition) return
+    setDragPosition(defaultPosition)
+    previousPositionRef.current = defaultPosition
+  }, [defaultPosition])
 
   useEffect(() => {
     const onPointerMove = (event: PointerEvent) => {
@@ -161,8 +197,8 @@ const Window = ({ title, onClose, children, icon, defaultPosition, zIndex, onFoc
 
     const applyFullscreenSize = () => {
       setSize({
-        width: Math.max(minWidth, window.innerWidth - 16),
-        height: Math.max(minHeight, window.innerHeight - 56),
+        width: Math.max(minWidth, window.innerWidth - FULLSCREEN_HORIZONTAL_CHROME),
+        height: Math.max(minHeight, window.innerHeight - FULLSCREEN_VERTICAL_CHROME),
       })
     }
 
@@ -170,6 +206,61 @@ const Window = ({ title, onClose, children, icon, defaultPosition, zIndex, onFoc
     window.addEventListener('resize', applyFullscreenSize)
     return () => window.removeEventListener('resize', applyFullscreenSize)
   }, [isFullscreen, minHeight, minWidth])
+
+  useEffect(() => {
+    const onPointerMove = (event: PointerEvent) => {
+      const restoreDragState = fullscreenRestoreDragRef.current
+      if (!restoreDragState || restoreDragState.pointerId !== event.pointerId) return
+
+      if (!restoreDragState.active) {
+        const movedX = Math.abs(event.clientX - restoreDragState.startX)
+        const movedY = Math.abs(event.clientY - restoreDragState.startY)
+        if (Math.max(movedX, movedY) < RESTORE_DRAG_THRESHOLD) return
+
+        const restoredWidth = previousSizeRef.current.width
+        const restoredHeight = previousSizeRef.current.height
+        const horizontalRatio = clamp(event.clientX / Math.max(1, size.width), 0.15, 0.85)
+        const offsetX = clamp(restoredWidth * horizontalRatio, 80, Math.max(80, restoredWidth - 80))
+        const offsetY = RESTORE_POINTER_OFFSET_Y
+        const nextX = clamp(event.clientX - offsetX, 0, Math.max(0, window.innerWidth - restoredWidth))
+        const actualTop = clamp(event.clientY - offsetY, 0, Math.max(0, window.innerHeight - restoredHeight))
+        const nextPosition = { x: nextX, y: actualTop - WINDOW_TOP_OFFSET }
+
+        restoreDragState.active = true
+        restoreDragState.offsetX = offsetX
+        restoreDragState.offsetY = offsetY
+
+        setIsFullscreen(false)
+        setSize(previousSizeRef.current)
+        setDragPosition(nextPosition)
+        previousPositionRef.current = nextPosition
+        return
+      }
+
+      const restoredWidth = previousSizeRef.current.width
+      const restoredHeight = previousSizeRef.current.height
+      const nextX = clamp(event.clientX - restoreDragState.offsetX, 0, Math.max(0, window.innerWidth - restoredWidth))
+      const actualTop = clamp(event.clientY - restoreDragState.offsetY, 0, Math.max(0, window.innerHeight - restoredHeight))
+      const nextPosition = { x: nextX, y: actualTop - WINDOW_TOP_OFFSET }
+
+      setDragPosition(nextPosition)
+      previousPositionRef.current = nextPosition
+    }
+
+    const onPointerUp = (event: PointerEvent) => {
+      const restoreDragState = fullscreenRestoreDragRef.current
+      if (!restoreDragState || restoreDragState.pointerId !== event.pointerId) return
+      fullscreenRestoreDragRef.current = null
+    }
+
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+
+    return () => {
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+    }
+  }, [size.width])
 
   useEffect(() => {
     const event = 'modal-visibility-changed' as Parameters<typeof subscribe>[0]
@@ -185,11 +276,15 @@ const Window = ({ title, onClose, children, icon, defaultPosition, zIndex, onFoc
     if (isFullscreen) {
       setIsFullscreen(false)
       setSize(previousSizeRef.current)
+      setDragPosition(previousPositionRef.current)
       return
     }
 
     previousSizeRef.current = size
+    previousPositionRef.current = dragPosition
+    fullscreenRestoreDragRef.current = null
     setIsFullscreen(true)
+    setDragPosition({ x: 0, y: 0 })
   }
 
   return (
@@ -198,8 +293,33 @@ const Window = ({ title, onClose, children, icon, defaultPosition, zIndex, onFoc
       id={title}
       icon={icon}
       title={title}
-      dragOptions={defaultPosition ? { defaultPosition } : undefined}
-      style={{ zIndex }}
+      dragOptions={{
+        disabled: isFullscreen,
+        position: dragPosition,
+        onDrag: ({ offsetX, offsetY }: ControlledDragData) => {
+          const nextPosition = { x: offsetX, y: offsetY }
+          setDragPosition(nextPosition)
+          previousPositionRef.current = nextPosition
+        },
+      }}
+      style={isFullscreen ? { zIndex, top: 0, left: 0 } : { zIndex }}
+      onPointerDownCapture={(event: React.PointerEvent<HTMLDivElement>) => {
+        if (!isFullscreen || event.button !== 0) return
+
+        const target = event.target as HTMLElement
+        if (!target.closest('.draggable')) return
+        if (target.closest('button')) return
+
+        fullscreenRestoreDragRef.current = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          active: false,
+          offsetX: 0,
+          offsetY: 0,
+        }
+        event.preventDefault()
+      }}
       onMouseDownCapture={() => {
         onFocus()
         focus(title)

@@ -57,5 +57,4 @@ npm run preview
 
 ## To Do
 
-- add support for different themes with wallpapers
 - update dates
