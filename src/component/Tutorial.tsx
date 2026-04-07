@@ -30,7 +30,7 @@ const tutorialContent = {
         'Open Resume.doc first for a quick snapshot, then open Projects for technical depth, supporting files, and full project context.',
         'Double-click desktop icons to open them, drag icons or window title bars to move them, resize windows from the bottom-right corner, and use the taskbar to switch between open windows.',
         'Settings lets you change text size, adjust desktop icon size, toggle the interface between languages, and switch themes between Vaporwave and Retro Blue.',
-        'There are a few interactive extras too, including Minesweeper and Tic-Tac-Toe under Games, plus a Music player with real tracks and playback controls.',
+        'There are a few interactive extras too, including Minesweeper and Tic-Tac-Toe under Games, plus a music player with real tracks and playback controls.',
       ],
     },
     extended: [
