@@ -150,7 +150,8 @@ const folders: FolderData[] = [
     items: [
       { name: 'Resume.doc', kind: 'doc', size: '96 KB', modified: '03/08/1998', openWindow: 'Resume.doc' },
       { name: 'Thanks.txt', kind: 'text', size: '4 KB', modified: '04/04/1998', openWindow: 'Thanks.txt' },
-      { name: 'tutorial.txt', kind: 'text', size: '5 KB', modified: '04/05/1998', openWindow: 'tutorial.txt' },
+      { name: 'tutorial.doc', kind: 'doc', size: '5 KB', modified: '04/05/1998', openWindow: 'tutorial.doc' },
+      { name: 'How_This_Site_Works.txt', kind: 'text', size: '7 KB', modified: '04/06/1998', openWindow: 'How_This_Site_Works.txt' },
     ],
   },
   {

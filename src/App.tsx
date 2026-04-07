@@ -12,8 +12,10 @@ import NeuralNetworkTeachInOverview from './component/NeuralNetworkTeachInOvervi
 import ProjectPdfViewer from './component/ProjectPdfViewer'
 import Resume from './component/Resume'
 import SettingsPanel from './component/SettingsPanel'
+import SiteArchitecture from './component/SiteArchitecture'
 import TerminalImageViewer from './component/TerminalImageViewer'
 import TerminalTheGameOverview from './component/TerminalTheGameOverview'
+import Tutorial from './component/Tutorial'
 import WindowBar from './component/WindowBar'
 import thisComputer from './assets/this_computer.png'
 import folderOpen from './assets/folder_open.png'
@@ -276,32 +278,31 @@ function App() {
         </DesktopIcon>
         <DesktopIcon
           icon={<img src={textfile} alt="Tutorial icon" />}
-          name="tutorial.txt"
+          name="tutorial.doc"
           desktopLabel={t('desktop.tutorial')}
           defaultWindowPosition={TUTORIAL_WINDOW_POSITION}
-          width={420}
-          height={280}
-          minWidth={360}
-          minHeight={240}
+          width={560}
+          height={420}
+          minWidth={420}
+          minHeight={300}
           initialX={RIGHT_COLUMN_X}
           initialY={ICON_Y + ICON_GAP_Y * 3}
           openByDefault
         >
-          <div style={{ display: 'grid', gap: '10px', lineHeight: 1.5 }}>
-            <h3 style={{ margin: 0 }}>{t('tutorial.title')}</h3>
-            <p style={{ margin: 0 }}>
-              {t('tutorial.projects')}
-            </p>
-            <p style={{ margin: 0 }}>
-              {t('tutorial.desktop')}
-            </p>
-            <p style={{ margin: 0 }}>
-              {t('tutorial.settings')}
-            </p>
-            <p style={{ margin: 0 }}>
-              {t('tutorial.games')}
-            </p>
-          </div>
+          <Tutorial />
+        </DesktopIcon>
+        <DesktopIcon
+          icon={<img src={textfile} alt="How This Site Works icon" />}
+          name="How_This_Site_Works.txt"
+          desktopLabel={t('desktop.siteArchitecture')}
+          width={620}
+          height={500}
+          minWidth={480}
+          minHeight={340}
+          initialX={RIGHT_COLUMN_X}
+          initialY={ICON_Y + ICON_GAP_Y * 4}
+        >
+          <SiteArchitecture />
         </DesktopIcon>
         <DesktopIcon
           icon={<img src={folderOpen} alt="Projects icon" />}
